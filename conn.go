@@ -37,6 +37,8 @@ func (c *Conn) Send(data interface{})(int, error){
 		msg = string(marshal)
 	case reflect.Ptr:
 		return c.Send(value.Elem().Interface())
+	case reflect.String:
+		msg = value.String()
 	default:
 		return 0, errors.New("unsupported type")
 	}

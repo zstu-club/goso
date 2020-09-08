@@ -61,6 +61,10 @@ func (c *TCPClient) SendString(data string) (int, error) {
 	return c.Conn.SendString(data)
 }
 
+func (c *TCPClient) Send(data interface{})(int, error){
+	return c.Conn.Send(data)
+}
+
 // 接收数据
 func (c *TCPClient) RecvBytes() ([]byte, error) {
 	return c.Conn.RecvBytes()
