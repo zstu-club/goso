@@ -1,7 +1,6 @@
 package goso
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -12,6 +11,9 @@ type Conn struct {
 
 // 发送数据
 func (c *Conn) SendBytes(data []byte) (int, error) {
+	if len(data) == 0{
+		return 0, nil
+	}
 	return c.Write(data)
 }
 
@@ -22,9 +24,7 @@ func (c *Conn) SendString(data string) (int, error) {
 // 接收数据 todo 如何接收全部的数据而不是1024字节
 func (c *Conn) RecvBytes() ([]byte, error) {
 	buf := make([]byte, c.BufferSize)
-	fmt.Println("a")
 	n, err := c.Read(buf)
-	fmt.Println("b")
 	return buf[:n], err
 }
 
