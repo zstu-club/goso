@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -23,7 +24,8 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		conn.Write(buf[:n])
+		str := strings.TrimSpace(string(buf[:n]))
+		conn.Write([]byte(str))
 		n, _ = conn.Read(buf)
 		fmt.Println("收到", string(buf[:n]))
 	}
