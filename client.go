@@ -3,6 +3,7 @@ package goso
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"net"
 	"os"
 	"strings"
@@ -13,6 +14,7 @@ type TCPClient struct {
 	Port        int
 	Conn        Conn
 	InputReader *bufio.Reader
+	Stdout      io.Writer // 标准输入
 }
 
 func NewTCPClient(host string, port int) (*TCPClient, error) {
@@ -25,13 +27,14 @@ func NewTCPClient(host string, port int) (*TCPClient, error) {
 		Port:        port,
 		Conn:        Conn{conn, 1024},
 		InputReader: bufio.NewReader(os.Stdin),
+		Stdout:      os.Stdout,
 	}, nil
 }
 
 // 从键盘读取数据
 func (c *TCPClient) InputBytes(prefix string) []byte {
 	buf := make([]byte, 1024)
-	fmt.Print(prefix)
+	_, _ = fmt.Fprint(c.Stdout,prefix)
 	n, _ := c.InputReader.Read(buf)
 
 	return buf[:n]
@@ -75,4 +78,8 @@ func (c *TCPClient) LocalAddr() string {
 // 设置自身信息
 func (c *TCPClient) SetBufferSize(size int) {
 	c.Conn.BufferSize = size
+}
+
+func (c *TCPClient) SetStdout(writer io.Writer){
+	c.Stdout = writer
 }
