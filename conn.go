@@ -3,6 +3,7 @@ package goso
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"reflect"
 	"strconv"
@@ -35,6 +36,7 @@ func (c *Conn) Send(data interface{})(int, error){
 			return 0, err
 		}
 		msg = string(marshal)
+		fmt.Println(msg)
 	case reflect.Ptr:
 		return c.Send(value.Elem().Interface())
 	case reflect.String:

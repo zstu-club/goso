@@ -17,8 +17,6 @@ type Listener struct {
 	net.Listener
 }
 
-
-
 func NewTCPServer(host string, port int) (*TCPServer,error){
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", host, port))
 	if err != nil {
