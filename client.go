@@ -76,10 +76,12 @@ func (c *TCPClient) LocalAddr() string {
 }
 
 // 设置自身信息
-func (c *TCPClient) SetBufferSize(size int) {
+func (c *TCPClient) SetBufferSize(size int)*TCPClient {
 	c.Conn.BufferSize = size
+	return c
 }
 
-func (c *TCPClient) SetStdout(writer io.Writer){
+func (c *TCPClient) SetStdout(writer io.Writer)*TCPClient{
 	c.Stdout = writer
+	return c
 }

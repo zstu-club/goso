@@ -38,8 +38,9 @@ func (s *TCPServer) LocalAddr()string{
 }
 
 // 设置信息
-func (s *TCPServer) SetBufferSize(size int){
+func (s *TCPServer) SetBufferSize(size int)*TCPServer{
 	s.BufferSize = size
+	return s
 }
 
 // conn处理类型
