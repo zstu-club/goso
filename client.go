@@ -1,4 +1,4 @@
-package main
+package goso
 
 import (
 	"bufio"
@@ -13,11 +13,6 @@ type TCPClient struct {
 	Port        int
 	Conn        Conn
 	InputReader *bufio.Reader
-	BufferSize  int
-}
-
-type Conn struct {
-	net.Conn
 }
 
 func NewTCPClient(host string, port int) (*TCPClient, error) {
@@ -28,9 +23,8 @@ func NewTCPClient(host string, port int) (*TCPClient, error) {
 	return &TCPClient{
 		Host:        host,
 		Port:        port,
-		Conn:        Conn{conn},
+		Conn:        Conn{conn, 1024},
 		InputReader: bufio.NewReader(os.Stdin),
-		BufferSize:  1024,
 	}, nil
 }
 
@@ -57,23 +51,20 @@ func (c *TCPClient) InputBytesTrimSpace(prefix string) []byte {
 
 // 发送数据
 func (c *TCPClient) SendBytes(data []byte) (int, error) {
-	return c.Conn.Write(data)
+	return c.Conn.SendBytes(data)
 }
 
 func (c *TCPClient) SendString(data string) (int, error) {
-	return c.Conn.Write([]byte(data))
+	return c.Conn.SendString(data)
 }
 
-// 接收数据 todo 如何接收全部的数据而不是1024字节
+// 接收数据
 func (c *TCPClient) RecvBytes() ([]byte, error) {
-	buf := make([]byte, c.BufferSize)
-	_, err := c.Conn.Read(buf)
-	return buf, err
+	return c.Conn.RecvBytes()
 }
 
 func (c *TCPClient) RecvString() (string, error) {
-	data, err := c.RecvBytes()
-	return string(data), err
+	return c.Conn.RecvString()
 }
 
 // 获取自身信息
@@ -83,20 +74,5 @@ func (c *TCPClient) LocalAddr() string {
 
 // 设置自身信息
 func (c *TCPClient) SetBufferSize(size int) {
-	c.BufferSize = size
-}
-
-func main() {
-	client, err := NewTCPClient("127.0.0.1", 8999)
-	if err != nil {
-		panic(err)
-	}
-	local := client.LocalAddr()
-	fmt.Println("start client in", local)
-	for {
-		data := client.InputBytesTrimSpace("请输入>>> ")
-		_, _ = client.SendBytes(data)
-		recv, _ := client.RecvString()
-		fmt.Println("接收到>>>", recv)
-	}
+	c.Conn.BufferSize = size
 }
