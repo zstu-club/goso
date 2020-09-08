@@ -62,17 +62,13 @@ func (s *TCPServer) Run(handleFun ConnHandler){
 func (s *TCPServer) EchoConn(conn Conn){
 	log.Printf("连接到了 %v", conn.RemoteAddr())
 	for {
-		buf := make([]byte, s.BufferSize)
-		n, err := conn.Read(buf)
+		data, err := conn.RecvString()
 		if err != nil {
 			log.Printf("断开连接 %v", conn.RemoteAddr())
 			return
 		}
-		if n == 0 {
-			return
-		}
-		log.Printf("[%v] SAY: (%s) LENGTH:[%d]\n", conn.RemoteAddr(), string(buf[:n]), n)
-		conn.Write(buf[:n])
+		log.Printf("[%v] SAY: (%s) LENGTH:[%d]\n", conn.RemoteAddr(), data, len(data))
+		_, _ = conn.SendString(data)
 	}
 }
 
