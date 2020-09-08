@@ -63,6 +63,7 @@ func (s *TCPServer) EchoConn(conn Conn){
 	log.Printf("Connect [%v]", conn.RemoteAddr())
 	for {
 		data, err := conn.RecvString()
+		fmt.Println("SERVER :", data, err)
 		if err != nil {
 			log.Printf("Disconnect [%v]", conn.RemoteAddr())
 			return
