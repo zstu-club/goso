@@ -13,8 +13,19 @@ func main() {
 
 	for {
 		data := client.InputStrTrimSpace("input: ")
-		if len(data) > 0{
+		if len(data) > 0 {
 			client.SendString(data)
+			recv, err := client.RecvString()
+			if err != nil {
+				return
+			}
+			fmt.Println("recv :", recv)
+		} else {
+			client.Send(&map[string]interface {}{
+				"name": "kainhuck",
+				"age": 10,
+				"hoby": []string{"golang", "python"},
+			})
 			recv, err := client.RecvString()
 			if err != nil {
 				return
