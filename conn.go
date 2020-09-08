@@ -1,7 +1,6 @@
 package goso
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -23,7 +22,6 @@ func (c *Conn) SendString(data string) (int, error) {
 func (c *Conn) RecvBytes() ([]byte, error) {
 	buf := make([]byte, c.BufferSize)
 	n, err := c.Read(buf)
-	fmt.Println("recv", n)
 	return buf[:n], err
 }
 
