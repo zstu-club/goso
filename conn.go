@@ -11,9 +11,6 @@ type Conn struct {
 
 // 发送数据
 func (c *Conn) SendBytes(data []byte) (int, error) {
-	if len(data) == 0{
-		return 0, nil
-	}
 	return c.Write(data)
 }
 
