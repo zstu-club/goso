@@ -19,8 +19,8 @@ func (c *Conn) SendString(data string) (int, error) {
 // 接收数据 todo 如何接收全部的数据而不是1024字节
 func (c *Conn) RecvBytes() ([]byte, error) {
 	buf := make([]byte, c.BufferSize)
-	_, err := c.Read(buf)
-	return buf, err
+	n, err := c.Read(buf)
+	return buf[:n], err
 }
 
 func (c *Conn) RecvString() (string, error) {
